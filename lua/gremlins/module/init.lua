@@ -1,0 +1,2 @@
+---@class ExModule
+return {}
