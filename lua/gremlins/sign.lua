@@ -3,10 +3,17 @@ local util = require("gremlins.util")
 local SIGN_GROUP = "gremlins_sign"
 local SIGN_NAME = "gremlin"
 
+---@class Sign
+---@field public icon string - The icon used in the sign column.
+---@field public signs table - The table of signs.
 local Sign = {}
 
 Sign.__index = Sign
 
+--- Sign Constructor
+---@param icon string - The icon to use.
+---@param signs table - The table to use
+---@return Sign
 function Sign:new(icon, signs)
     self.index = self
 
@@ -21,6 +28,10 @@ function Sign:new(icon, signs)
     return sign
 end
 
+--- Check for gremlins in a line.
+---@private
+---@param line string - The line to check.
+---@return boolean, string, string found - Gremlin status, name, description.
 function Sign:_check(line)
     for _, c in ipairs(self.signs) do
         local name = c
@@ -31,18 +42,26 @@ function Sign:_check(line)
             description = c.description
         end
 
-        if vim.regex("\\%u" .. name):match_str(line) then return true, name, description end
+        -- stylua: ignore
+        if vim.regex("\\%u" .. name):match_str(line) then
+            return true, name, description
+        end
     end
 
-    return false
+    return false, "", ""
 end
 
+--- Check if the current file contains a gremlin.
+---@private
+---@return boolean empty - Is the file free of gremlins?
 function Sign:_empty()
     if #self.list == 0 then vim.print("[gremlins.nvim] No gremlins in file!") end
 
     return #self.list == 0
 end
 
+--- Run a gremlin check on the current buffer/file.
+---@return nil
 function Sign:run()
     if not util.is_file() then return end
 
@@ -63,6 +82,8 @@ function Sign:run()
     end
 end
 
+--- Open `vim.ui.select` with a list of gremlins in the current file.
+---@return nil
 function Sign:open()
     local list = util.extract_value(self.list, "name")
 
@@ -80,6 +101,8 @@ function Sign:open()
     end)
 end
 
+--- Jump to next gremlin (if it exists).
+---@return nil
 function Sign:next()
     local row = unpack(vim.api.nvim_win_get_cursor(0))
     local indexes = util.extract_value(self.list, "index")
@@ -102,6 +125,8 @@ function Sign:next()
     vim.api.nvim_win_set_cursor(0, { next, 0 })
 end
 
+--- Jump to previous gremlin (if it exists).
+---@return nil
 function Sign:prev()
     local row = unpack(vim.api.nvim_win_get_cursor(0))
     local indexes = util.extract_value(self.list, "index")

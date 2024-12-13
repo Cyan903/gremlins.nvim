@@ -1,17 +1,25 @@
-return {
-    is_file = function()
-        local b = vim.fn.expand("%:p")
+local util = {}
 
-        return vim.bo.buftype == "" and b ~= "" and vim.fn.filereadable(b)
-    end,
+--- Check if current buffer is a valid file.
+---@return 0|1|false
+function util.is_file()
+    local b = vim.fn.expand("%:p")
 
-    extract_value = function(tbl, index)
-        local list = {}
+    return vim.bo.buftype == "" and b ~= "" and vim.fn.filereadable(b)
+end
 
-        for i in ipairs(tbl) do
-            list[#list + 1] = tbl[i][index]
-        end
+--- Extract a value from a key-value table.
+---@param tbl table - The table to read from.
+---@param index string - The key to read from.
+---@return table
+function util.extract_value(tbl, index)
+    local list = {}
 
-        return list
-    end,
-}
+    for i in ipairs(tbl) do
+        list[#list + 1] = tbl[i][index]
+    end
+
+    return list
+end
+
+return util
