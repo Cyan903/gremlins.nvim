@@ -10,7 +10,7 @@ local Sign = {}
 
 Sign.__index = Sign
 
---- Sign Constructor
+---Sign Constructor
 ---@param icon string - The icon to use.
 ---@param signs table - The table to use
 ---@return Sign
@@ -28,7 +28,7 @@ function Sign:new(icon, signs)
     return sign
 end
 
---- Check for gremlins in a line.
+---Check for gremlins in a line.
 ---@private
 ---@param line string - The line to check.
 ---@return boolean, string, string found - Gremlin status, name, description.
@@ -51,7 +51,7 @@ function Sign:_check(line)
     return false, "", ""
 end
 
---- Check if the current file contains a gremlin.
+---Check if the current file contains a gremlin.
 ---@private
 ---@return boolean empty - Is the file free of gremlins?
 function Sign:_empty()
@@ -60,7 +60,7 @@ function Sign:_empty()
     return #self.list == 0
 end
 
---- Run a gremlin check on the current buffer/file.
+---Run a gremlin check on the current buffer/file.
 ---@return nil
 function Sign:run()
     if not util.is_file() then return end
@@ -82,14 +82,12 @@ function Sign:run()
     end
 end
 
---- Open `vim.ui.select` with a list of gremlins in the current file.
+---Open `vim.ui.select` with a list of gremlins in the current file.
 ---@return nil
-function Sign:open()
-    local list = util.extract_value(self.list, "name")
-
+function Sign:select()
     if self:_empty() then return end
 
-    vim.ui.select(list, { prompt = "Select Gremlin" }, function(gremlin_name)
+    vim.ui.select(util.extract_value(self.list, "name"), { prompt = "Select Gremlin" }, function(gremlin_name)
         if not gremlin_name then return end
 
         for _, n in ipairs(self.list) do
@@ -101,14 +99,33 @@ function Sign:open()
     end)
 end
 
---- Jump to next gremlin (if it exists).
+---Create a quickfix list of gremlins.
+---@return nil
+function Sign:qflist()
+    if self:_empty() then
+        vim.fn.setqflist({}, "r")
+        return
+    end
+
+    local filename = vim.fn.expand("%:p")
+    local list = {}
+
+    for _, n in ipairs(self.list) do
+        list[#list + 1] = { filename = filename, lnum = n.index, text = n.name }
+    end
+
+    vim.fn.setqflist(list, "r")
+    if #vim.fn.getqflist() > 0 then vim.cmd("copen") end
+end
+
+---Jump to next gremlin (if it exists).
 ---@return nil
 function Sign:next()
+    if self:_empty() then return end
+
     local row = unpack(vim.api.nvim_win_get_cursor(0))
     local indexes = util.extract_value(self.list, "index")
     local next = -1
-
-    if self:_empty() then return end
 
     for _, v in ipairs(indexes) do
         if v > row then
@@ -125,14 +142,14 @@ function Sign:next()
     vim.api.nvim_win_set_cursor(0, { next, 0 })
 end
 
---- Jump to previous gremlin (if it exists).
+---Jump to previous gremlin (if it exists).
 ---@return nil
 function Sign:prev()
+    if self:_empty() then return end
+
     local row = unpack(vim.api.nvim_win_get_cursor(0))
     local indexes = util.extract_value(self.list, "index")
     local next = -1
-
-    if self:_empty() then return end
 
     for i = #indexes, 1, -1 do
         if indexes[i] < row then

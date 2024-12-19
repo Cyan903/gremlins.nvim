@@ -4,10 +4,12 @@ local Sign = require("gremlins.sign")
 ---@field public config GremlinConfig
 local M = { config = require("gremlins.config") }
 
---- Gremlins Setup
+-- TODO: Test if extending config.gremlins works
+-- TODO: Filetypes
+
+---Gremlins Setup
 ---@param args GremlinConfig
 M.setup = function(args)
-    -- TODO: Test if extending config.gremlins works
     M.config = vim.tbl_deep_extend("force", M.config, args or {})
     M.signs = Sign:new(M.config.icon, M.config.gremlins)
 
@@ -17,13 +19,16 @@ M.setup = function(args)
     })
 end
 
---- Open Popup
-M.open = function() M.signs:open() end
+---Open popup.
+M.select = function() M.signs:select() end
 
---- Jump to next gremlin.
+---Create quickfix list.
+M.qflist = function() M.signs:qflist() end
+
+---Jump to next gremlin.
 M.next = function() M.signs:next() end
 
--- Jump to previous gremlin.
+---Jump to previous gremlin.
 M.prev = function() M.signs:prev() end
 
 return M

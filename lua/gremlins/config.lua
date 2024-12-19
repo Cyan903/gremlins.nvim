@@ -5,10 +5,13 @@ local C = {}
 
 C.icon = ""
 
+-- NOTE: Default config from vscode-gremlins
+-- https://github.com/nhoizey/vscode-gremlins/blob/b46295d0c01ea102790bb9b574bddae342d1a075/package.json#L77
+
 ---@class Gremlin
----@field name string
----@field description string
----@see https://github.com/nhoizey/vscode-gremlins/blob/b46295d0c01ea102790bb9b574bddae342d1a075/package.json#L77
+---@field name string - Unicode value of the gremlin.
+---@field description string - Text description of the gremlin.
+---@field filetype? string|string[] - Only apply to specific filetypes.
 C.gremlins = {
     {
         name = "2013",
