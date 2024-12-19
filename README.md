@@ -34,7 +34,7 @@ return {
 
 ## Configuration
 
-The default configuration is recommended, but custom parameters can be provided through the setup function. Gremlins with a custom file type will only appear in the specified file type.
+The default configuration is recommended, but custom parameters can be provided through the setup function. Gremlins with a custom file type will only appear in the specified file type. You can view the default config in [config.lua](lua/gremlins/config.lua).
 
 ```lua
 require("gremlins").setup {
