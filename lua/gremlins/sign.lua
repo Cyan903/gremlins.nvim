@@ -31,19 +31,26 @@ end
 ---Check for gremlins in a line.
 ---@private
 ---@param line string - The line to check.
----@return boolean, string, string found - Gremlin status, name, description.
+---@return boolean, string, string - Gremlin status, name, description.
 function Sign:_check(line)
     for _, c in ipairs(self.signs) do
         local name = c
         local description = "Unknown"
+        local ft = true
 
         if type(name) == "table" then
             name = c.name
             description = c.description
+
+            if type(c.filetype) == "string" then
+                ft = vim.bo.filetype == c.filetype
+            elseif type(c.filetype) == "table" then
+                ft = util.includes(c.filetype, vim.bo.filetype)
+            end
         end
 
         -- stylua: ignore
-        if vim.regex("\\%u" .. name):match_str(line) then
+        if vim.regex("\\%u" .. name):match_str(line) and ft then
             return true, name, description
         end
     end

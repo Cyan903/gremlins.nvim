@@ -22,4 +22,16 @@ function util.extract_value(tbl, index)
     return list
 end
 
+---Does table include value?
+---@param tbl table - The table to read from.
+---@param val string - The key to check from.
+---@return boolean
+function util.includes(tbl, val)
+    for i in ipairs(tbl) do
+        if tbl[i] == val then return true end
+    end
+
+    return false
+end
+
 return util

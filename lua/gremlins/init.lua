@@ -4,9 +4,6 @@ local Sign = require("gremlins.sign")
 ---@field public config GremlinConfig
 local M = { config = require("gremlins.config") }
 
--- TODO: Test if extending config.gremlins works
--- TODO: Filetypes
-
 ---Gremlins Setup
 ---@param args GremlinConfig
 M.setup = function(args)

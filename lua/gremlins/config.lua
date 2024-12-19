@@ -13,6 +13,23 @@ C.icon = ""
 ---@field description string - Text description of the gremlin.
 ---@field filetype? string|string[] - Only apply to specific filetypes.
 C.gremlins = {
+    -- NOTE: Parameters can simply be strings.
+    -- "2013",
+
+    -- NOTE: Or be more descriptive with a specified filetype.
+    -- {
+    --     name = "2013",
+    --     description = "en dash",
+    --     filetype = "markdown",
+    -- },
+
+    -- NOTE: Multiple filetypes are supported.
+    -- {
+    --     name = "2013",
+    --     description = "en dash",
+    --     filetype = { "markdown", "go" },
+    -- },
+
     {
         name = "2013",
         description = "en dash",
