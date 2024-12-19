@@ -1,5 +1,7 @@
 # gremlins.nvim
 
+A Neovim rewrite of the [vscode-gremlins](https://marketplace.visualstudio.com/items?itemName=nhoizey.gremlins) extension, designed to reveal unwanted or invisible characters in your code. 
+
 
 ## Lazy Quickstart
 

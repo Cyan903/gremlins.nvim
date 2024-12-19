@@ -1,0 +1,11 @@
+repos:
+  - repo: 'https://github.com/kdheepak/panvimdoc'
+    rev: v4.0.1
+    hooks:
+      - id: panvimdoc-docker
+        files: ^.*\.md$
+        args:
+          - '--project-name'
+          - gremlins.nvim
+          - '--input-file'
+          - README.md
